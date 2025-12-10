@@ -33,3 +33,41 @@ sudo docker run -p 8080:8080 -p 1883:1883 hivemq/hivemq4
 ```
 sudo docker run -it -d --name mosquitto_broker -p 1883:1883 -v mosquitto_data:/mosquitto/data -v mosquitto_log:/mosquitto/log -v mosquitto_config:/mosquitto/config eclipse-mosquitto:latest
 ```
+
+## 4. Telegraf
+```
+cat <<EOF | sudo tee /etc/apt/sources.list.d/influxdata.list
+deb https://repos.influxdata.com/ubuntu $(lsb_release -cs) stable
+EOF
+```
+```
+curl -fsSL https://repos.influxdata.com/influxdata-archive_compat.key | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/influxdata.gpg
+```
+```
+sudo apt update
+```
+```
+sudo apt install telegraf
+```
+### Setting telegraf ketika Sudah install InfluxDB dan Grafana
+```
+sudo nano /etc/telegraf/telegraf.d/mqtt_sys.conf
+```
+### Masukan ini
+```
+[[inputs.mqtt_consumer]]
+  servers = ["tcp://localhost:1883"]
+  topics = [
+    "$SYS/#"
+  ]
+  username = ""
+  password = ""
+  data_format = "value"
+  qos = 0
+
+[[outputs.influxdb_v2]]
+  urls = ["http://localhost:8086"]
+  token = "TOKEN_KAMU"
+  organization = "ORG_KAMU"
+  bucket = "telegraf"
+```
