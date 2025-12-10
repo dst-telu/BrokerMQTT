@@ -33,7 +33,6 @@ sudo docker run -p 8080:8080 -p 1883:1883 hivemq/hivemq4
 ```
 sudo docker run -it -d --name mosquitto_broker -p 1883:1883 -v mosquitto_data:/mosquitto/data -v mosquitto_log:/mosquitto/log -v mosquitto_config:/mosquitto/config eclipse-mosquitto:latest
 ```
-
 ## 4. Telegraf
 ```
 cat <<EOF | sudo tee /etc/apt/sources.list.d/influxdata.list
@@ -70,4 +69,23 @@ sudo nano /etc/telegraf/telegraf.d/mqtt_sys.conf
   token = "TOKEN_KAMU"
   organization = "ORG_KAMU"
   bucket = "telegraf"
+```
+
+## 5. Mematikan dan menyalakan Container Broker MQTT
+
+### Mematikan
+```
+sudo docker ps
+```
+cari container HiveMQ/Mosquitto
+```
+sudo docker container stop [NAMA CONTAINER]
+```
+### Menghidupkan
+```
+sudo docker container ls -a
+```
+cari container HiveMQ/Mosquitto
+```
+sudo docker container start [NAMA CONTAINER]
 ```
